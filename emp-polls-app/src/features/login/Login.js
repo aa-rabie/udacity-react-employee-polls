@@ -19,7 +19,7 @@ import { setAuthUser } from "../authUser/authUserSlice";
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function Login() {
   const dispatch = useDispatch();
   const [selectedUser, setSeletedUser] = useState("");
   const [alertDisplayed, setAlertDisplayed] = useState(false);
