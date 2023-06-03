@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 
 const QuestionSummary = ({ question }) => {
   const handleClick = (e) => {
-    //TODO: REDIRECT TO QUESTION SUMMARY DETAILS
+    //TODO: NAVIGATE TO QUESTION SUMMARY DETAILS
   };
 
   function formatTimeStamp() {

@@ -13,7 +13,8 @@ import Alert from "@mui/material/Alert";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsersAsync } from "../users/usersSlice";
-import { setAuthUser } from "../authUser/authUserSlice";
+import { setAuthUser, selectAuthUser } from "../authUser/authUserSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // TODO remove createTheme() , this demo shouldn't need to reset the theme.
 
@@ -23,6 +24,12 @@ export default function Login() {
   const dispatch = useDispatch();
   const [selectedUser, setSeletedUser] = useState("");
   const [alertDisplayed, setAlertDisplayed] = useState(false);
+  let location = useLocation();
+  let navigate = useNavigate();
+  const doesAnyHistoryEntryExist = location.key !== "default";
+
+  var currentlyLoggedInUser = useSelector(selectAuthUser);
+
   const handleChange = (event) => {
     setSeletedUser(users[event.target.value].id);
     setAlertDisplayed(
@@ -43,11 +50,21 @@ export default function Login() {
     setAlertDisplayed(selectedUser === "");
     if (selectedUser === "") return;
 
+    //TODO: REMOVE LOG
     console.log({
       authUser: users[selectedUser],
+      location: location,
+      doesAnyHistoryEntryExist,
     });
 
     dispatch(setAuthUser(users[selectedUser]));
+
+    if (doesAnyHistoryEntryExist) {
+      // go back to previous page
+      navigate(-1);
+    } else {
+      navigate("/home");
+    }
   };
 
   return (
@@ -65,7 +82,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
           </Typography>
           <Box
             component="form"
@@ -100,7 +117,7 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+               {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
             </Button>
             {alertDisplayed && (
               <Alert severity="error">Please select a user!</Alert>

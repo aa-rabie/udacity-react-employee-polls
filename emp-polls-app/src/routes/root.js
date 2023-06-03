@@ -1,6 +1,7 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
@@ -16,8 +17,17 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Container from "@mui/material/Container";
 import LoginIcon from "@mui/icons-material/Login";
-import { Outlet, Link } from "react-router-dom";
+import PollIcon from "@mui/icons-material/Poll";
+import HomeIcon from "@mui/icons-material/Home";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import { Outlet, Link, useNavigate, useNavigation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectAuthUser,
+  setAuthUser,
+} from "../features/authUser/authUserSlice";
 
 const drawerWidth = 240;
 
@@ -67,8 +77,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Root() {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  let navigate = useNavigate();
+  let navigation = useNavigation();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -78,12 +91,22 @@ export default function Root() {
     setOpen(false);
   };
 
-  const menuItems = [
-    {
-      text: "Login",
-      url: "",
-    },
-  ];
+  let authedUser = useSelector(selectAuthUser);
+
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(setAuthUser(null));
+    //navigate to login page
+    navigate("/");
+  };
+
+  if (navigation.state === "loading") {
+    return (
+      <Container maxWidth="sm">
+        <Typography variant="h1">Loading...</Typography>
+      </Container>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -99,9 +122,23 @@ export default function Root() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Employee Polls App
           </Typography>
+          {authedUser !== null && (
+            <Typography variant="h6" component="span">
+              {authedUser.id}
+            </Typography>
+          )}
+          {authedUser !== null && (
+            <Button
+              variant="contained"
+              sx={{ my: 1, mx: 1.5 }}
+              onClick={logout}
+            >
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -133,7 +170,45 @@ export default function Root() {
               <ListItemIcon>
                 <LoginIcon />
               </ListItemIcon>
-              <ListItemText primary={"Login"} />
+              <ListItemText
+                primary={authedUser === null ? "Login" : "Switch User"}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"home"} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={"/home"}
+              disabled={authedUser === null}
+            >
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Home"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"NewPoll"} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={"/new"}
+              disabled={authedUser === null}
+            >
+              <ListItemIcon>
+                <PollIcon />
+              </ListItemIcon>
+              <ListItemText primary={"New Poll"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"leaderboard"} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={"/leaderboard"}
+              disabled={authedUser === null}
+            >
+              <ListItemIcon>
+                <LeaderboardIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Leaderboard"} />
             </ListItemButton>
           </ListItem>
         </List>
