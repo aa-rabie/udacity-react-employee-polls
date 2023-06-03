@@ -59,12 +59,14 @@ export default function Login() {
 
     dispatch(setAuthUser(users[selectedUser]));
 
-    if (doesAnyHistoryEntryExist) {
-      // go back to previous page
-      navigate(-1);
-    } else {
-      navigate("/home");
-    }
+    setTimeout(() => {
+      if (doesAnyHistoryEntryExist) {
+        // go back to previous page
+        navigate(-1);
+      } else {
+        navigate("/home");
+      }
+    }, 100);
   };
 
   return (
@@ -117,7 +119,7 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-               {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
+              {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
             </Button>
             {alertDisplayed && (
               <Alert severity="error">Please select a user!</Alert>

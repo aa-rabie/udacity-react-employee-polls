@@ -17,6 +17,7 @@ import NewQuestion from "./features/questions/NewQuestion";
 import NotFound from "./routes/not-found-page";
 import Home from "./features/home/Home";
 import Leaderboard from "./features/leaderboard/leaderboard";
+import ProtectedRoute from "./routes/protected-route";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -29,19 +30,39 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Login /> },
       {
+        path: "/login",
+        element: <Login />,
+      },
+      {
         path: "/new",
-        element: <NewQuestion />,
+        element: (
+          <ProtectedRoute>
+            <NewQuestion />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/home",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/leaderboard",
-        element: <Leaderboard />,
+        element: (
+          <ProtectedRoute>
+            <Leaderboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/404",
+        element: <NotFound />,
+      },
+      {
+        path: "*",
         element: <NotFound />,
       },
     ],
