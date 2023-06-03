@@ -127,7 +127,7 @@ export default function Root() {
           </Typography>
           {authedUser !== null && (
             <Typography variant="h6" component="span">
-              {authedUser.id}
+              {authedUser.name} ({authedUser.id})
             </Typography>
           )}
           {authedUser !== null && (

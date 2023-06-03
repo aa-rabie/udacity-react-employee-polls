@@ -1,20 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { selectAuthUser } from "../features/authUser/authUserSlice";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 
 const ProtectedRoute = ({ redirectPath = "/", children }) => {
   const authedUser = useSelector(selectAuthUser);
-  const navigate = useNavigate();
-  useEffect(() => {
-    const isAllowed = authedUser !== null;
-    console.log(`isAllowed : ${isAllowed}`);
-    if (!isAllowed) {
-      navigate(redirectPath);
-    }
-  }, [authedUser, redirectPath, navigate]);
+  const isAllowed = authedUser !== null;
+  //TODO: REMOVE
+  console.log(`isAllowed : ${isAllowed}`);
 
-  return children;
+  return <>{isAllowed ? children : <Navigate to={redirectPath} />}</>;
 };
 
 export default ProtectedRoute;
