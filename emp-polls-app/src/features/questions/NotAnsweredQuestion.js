@@ -14,6 +14,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const NotAnsweredQuestion = ({ questionId }) => {
   const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const NotAnsweredQuestion = ({ questionId }) => {
   const question = questions[questionId];
   const authedUser = useSelector(selectAuthUser);
   var users = useSelector((state) => state.users.data);
+  var author = users[question.author];
 
   function prepareReplies() {
     var data = [];
@@ -109,6 +112,22 @@ const NotAnsweredQuestion = ({ questionId }) => {
 
   return (
     <Grid container spacing={2}>
+      <Grid xs={12}>
+        <Stack>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4">Poll By {author.name}</Typography>
+
+            <Avatar src={author.avatarURL} sx={{ width: 64, height: 64 }} />
+          </Box>
+          <Typography variant="h4">Would You Rather</Typography>
+        </Stack>
+      </Grid>
       <Grid xs={6}>
         <Stack>
           <TextField

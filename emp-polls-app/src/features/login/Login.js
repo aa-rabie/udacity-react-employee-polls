@@ -10,15 +10,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Alert from "@mui/material/Alert";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsersAsync } from "../users/usersSlice";
 import { setAuthUser, selectAuthUser } from "../authUser/authUserSlice";
 import { useLocation, useNavigate } from "react-router-dom";
-
-// TODO remove createTheme() , this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -70,63 +65,56 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <FormControl fullWidth>
-              <InputLabel id="users-select-label">Login As</InputLabel>
-              <Select
-                labelId="users-select-label"
-                id="users-select"
-                name="users-select"
-                value={selectedUser}
-                label="Login As"
-                onChange={handleChange}
-                required
-              >
-                {usersIds.map((id) => {
-                  const user = users[id];
-                  return (
-                    <MenuItem key={user.id} value={user.id}>
-                      {user.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <FormControl fullWidth>
+            <InputLabel id="users-select-label">Login As</InputLabel>
+            <Select
+              labelId="users-select-label"
+              id="users-select"
+              name="users-select"
+              value={selectedUser}
+              label="Login As"
+              onChange={handleChange}
+              required
             >
-              {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
-            </Button>
-            {alertDisplayed && (
-              <Alert severity="error">Please select a user!</Alert>
-            )}
-          </Box>
+              {usersIds.map((id) => {
+                const user = users[id];
+                return (
+                  <MenuItem key={user.id} value={user.id}>
+                    {user.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
+          </Button>
+          {alertDisplayed && (
+            <Alert severity="error">Please select a user!</Alert>
+          )}
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Container>
   );
 }
