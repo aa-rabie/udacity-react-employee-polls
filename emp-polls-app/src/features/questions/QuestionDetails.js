@@ -6,6 +6,7 @@ import { Box, Typography } from "@mui/material";
 import { purple } from "@mui/material/colors";
 import { fetchAllQuestionsAsync } from "../questions/questionsSlice";
 import NotAnsweredQuestion from "./NotAnsweredQuestion";
+import AnsweredQuestion from "./AnsweredQuestion";
 
 const primary = purple[500]; // #f44336
 const QuestionDetails = () => {
@@ -64,7 +65,7 @@ const QuestionDetails = () => {
       return <Navigate to={"/404"} />;
     } else {
       if (isAnswered) {
-        return <div>ANSWERED : {qid}</div>;
+        return <AnsweredQuestion questionId={qid} />;
       } else {
         return <NotAnsweredQuestion questionId={qid} />;
       }

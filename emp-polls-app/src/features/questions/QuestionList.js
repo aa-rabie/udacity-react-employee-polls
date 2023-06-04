@@ -15,7 +15,7 @@ const QuestionList = ({ title, questions }) => {
           alignItems: "center",
         }}
       >
-        <Typography component="h1">{title || "New Questions"}</Typography>
+        <Typography variant="h4">{title || "New Questions"}</Typography>
       </Box>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {questions.map((q) => (
