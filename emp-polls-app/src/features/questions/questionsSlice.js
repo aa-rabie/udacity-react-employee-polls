@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { _getQuestions } from "../../_DATA";
+import { _getQuestions, _saveQuestionAnswer } from "../../_DATA";
 
 const initialState = {
   status: "idle",
@@ -13,6 +13,20 @@ export const fetchAllQuestionsAsync = createAsyncThunk(
     const questions = await _getQuestions();
     // The value we return becomes the `fulfilled` action payload
     return questions;
+  }
+);
+
+export const saveQuestionAnswerAsync = createAsyncThunk(
+  "questions/saveQuestionAnswer",
+  async ({ authedUser, qid, answer }, { dispatch }) => {
+    let input = { authedUser, qid, answer };
+    const isSaveSucceeded = await _saveQuestionAnswer(input);
+    if (isSaveSucceeded) {
+      // reload questions into store from data-store
+      dispatch(fetchAllQuestionsAsync());
+    }
+    // The value we return becomes the `fulfilled` action payload
+    return isSaveSucceeded;
   }
 );
 

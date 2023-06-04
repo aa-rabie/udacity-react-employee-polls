@@ -187,16 +187,16 @@ export default function Root() {
               <ListItemText primary={"Home"} />
             </ListItemButton>
           </ListItem>
-          <ListItem key={"NewPoll"} disablePadding>
+          <ListItem key={"AddPoll"} disablePadding>
             <ListItemButton
               component={Link}
-              to={"/new"}
+              to={"/add"}
               disabled={authedUser === null}
             >
               <ListItemIcon>
                 <PollIcon />
               </ListItemIcon>
-              <ListItemText primary={"New Poll"} />
+              <ListItemText primary={"Add Poll"} />
             </ListItemButton>
           </ListItem>
           <ListItem key={"leaderboard"} disablePadding>

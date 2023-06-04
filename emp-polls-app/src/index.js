@@ -18,6 +18,7 @@ import NotFound from "./routes/not-found-page";
 import Home from "./features/home/Home";
 import Leaderboard from "./features/leaderboard/leaderboard";
 import ProtectedRoute from "./routes/protected-route";
+import QuestionDetails from "./features/questions/QuestionDetails";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/new",
+        path: "/add",
         element: (
           <ProtectedRoute>
             <NewQuestion />
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             <Leaderboard />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/questions/:qid",
+        element: <QuestionDetails />,
       },
       {
         path: "/404",
