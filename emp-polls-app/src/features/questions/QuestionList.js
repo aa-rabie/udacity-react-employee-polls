@@ -15,12 +15,12 @@ const QuestionList = ({ title, questions }) => {
           alignItems: "center",
         }}
       >
-        <Typography component="h4">{title || "New Questions"}</Typography>
+        <Typography component="h1">{title || "New Questions"}</Typography>
       </Box>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {questions.map((q) => (
-          <Grid xs={2}>
-            <QuestionSummary key={q.id} question={q} />
+          <Grid xs={2} key={q.id}>
+            <QuestionSummary question={q} />
           </Grid>
         ))}
       </Grid>

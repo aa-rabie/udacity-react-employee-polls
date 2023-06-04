@@ -7,11 +7,14 @@ const QuestionSummary = ({ question }) => {
     //TODO: NAVIGATE TO QUESTION SUMMARY DETAILS
   };
 
-  function formatTimeStamp() {
+  function formatDate() {
     let date = new Date(question.timestamp);
-    return `${date.getDate()}\\${
-      date.getMonth() + 1
-    }\\${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    return `${date.getDate()}\\${date.getMonth() + 1}\\${date.getFullYear()}`;
+  }
+
+  function formatTime() {
+    let date = new Date(question.timestamp);
+    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   }
 
   return (
@@ -24,7 +27,8 @@ const QuestionSummary = ({ question }) => {
       }}
     >
       <Typography component="h5">{question.author}</Typography>
-      <Typography component="h6">{formatTimeStamp()}</Typography>
+      <Typography component="h6">{formatDate()}</Typography>
+      <Typography component="h6">{formatTime()}</Typography>
       <Button onClick={handleClick} variant="contained" sx={{ mt: 3, mb: 2 }}>
         show
       </Button>
