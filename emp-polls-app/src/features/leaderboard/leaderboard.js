@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsersAsync } from "../users/usersSlice";
 import Table from "@mui/material/Table";
@@ -10,14 +11,19 @@ import Paper from "@mui/material/Paper";
 import { Avatar, Stack } from "@mui/material";
 
 const Leaderboard = (props) => {
+  const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
   var status = useSelector((state) => state.users.status);
-  if (status !== "loaded") {
-    dispatch(fetchAllUsersAsync());
-  }
 
   var users = useSelector((state) => state.users.data);
   const usersIds = Object.keys(users);
+
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(fetchAllUsersAsync());
+      setLoaded(true);
+    }
+  }, [loaded, dispatch]);
 
   function prepareData() {
     let data = [];
