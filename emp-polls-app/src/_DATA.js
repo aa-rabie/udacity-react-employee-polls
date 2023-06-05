@@ -213,8 +213,7 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
             },
           },
         };
-      };
-    
+      }
 
       var userExistsinAnswerVotes =
         questions[qid][answer].votes &&
@@ -232,6 +231,7 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
           },
         },
       };
+      //TODO: REMOVE LOG
       console.log(questions[qid]);
       resolve(true);
     }, 500);

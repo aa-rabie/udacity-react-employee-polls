@@ -10,6 +10,13 @@ import { Avatar } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 const AnsweredQuestion = ({ questionId }) => {
   var questions = useSelector((state) => state.questions.data);
@@ -32,6 +39,65 @@ const AnsweredQuestion = ({ questionId }) => {
   } else if (question["optionTwo"].votes.indexOf(authedUser.id) > -1) {
     selectedOptionTxt = `${selectedOptionTxt} second option`;
     selectedOption = 2;
+  }
+
+  function prepareReplies() {
+    var data = [];
+    question["optionOne"].votes.forEach((userId) => {
+      let user = users[userId];
+      data.push({ one: user, two: null });
+    });
+    question["optionTwo"].votes.forEach((userId) => {
+      let user = users[userId];
+      data.push({ one: null, two: user });
+    });
+    return data;
+  }
+
+  function ItemOne({ row }) {
+    if (row.one !== null)
+      return (
+        <Stack direction={"row"}>
+          <Avatar src={row.one.avatarURL} /> {row.one.name} ({row.one.id})
+        </Stack>
+      );
+  }
+
+  function ItemTwo({ row }) {
+    if (row.two !== null)
+      return (
+        <Stack direction={"row"}>
+          <Avatar src={row.two.avatarURL} /> {row.two.name} ({row.two.id})
+        </Stack>
+      );
+  }
+
+  function Replies() {
+    var data = prepareReplies();
+    return (
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="leaderboard table">
+          <TableHead>
+            <TableRow>
+              <TableCell>First Option selected by</TableCell>
+              <TableCell>Second Option selected by</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={(row.one || row.two).id}>
+                <TableCell component="th" scope="row">
+                  <ItemOne row={row} />
+                </TableCell>
+                <TableCell>
+                  <ItemTwo row={row} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   }
 
   return (
@@ -113,6 +179,17 @@ const AnsweredQuestion = ({ questionId }) => {
           }}
         >
           <Typography variant="h4">{selectedOptionTxt}</Typography>
+        </Box>
+      </Grid>
+      <Grid xs={12}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Replies />
         </Box>
       </Grid>
     </Grid>

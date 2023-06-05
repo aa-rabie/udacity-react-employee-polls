@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 
 import { selectAuthUser } from "../authUser/authUserSlice";
@@ -10,22 +11,29 @@ import AnsweredQuestion from "./AnsweredQuestion";
 
 const primary = purple[500]; // #f44336
 const QuestionDetails = () => {
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
   const dispatch = useDispatch();
   const authedUser = useSelector(selectAuthUser);
   const isAllowed = authedUser !== null;
 
   let { qid } = useParams();
 
-  var status = useSelector((state) => state.questions.status);
-  if (status !== "loaded") {
-    dispatch(fetchAllQuestionsAsync());
-  }
+  useEffect(() => {
+    if (!questionsLoaded) {
+      dispatch(fetchAllQuestionsAsync());
 
-  var questions = useSelector((state) => state.questions.data);
+      setQuestionsLoaded(true);
+    }
+  }, [questionsLoaded, dispatch]);
+
+  let questions = useSelector((state) => state.questions.data);
 
   const questionNotFound = !questions.hasOwnProperty(qid);
 
   const q = questionNotFound ? null : questions[qid];
+
+  //TODO: REMOVE
+  console.log(questionNotFound ? `question not found for id : ${qid} ` : q);
 
   var isAnswered =
     isAllowed === false || questionNotFound

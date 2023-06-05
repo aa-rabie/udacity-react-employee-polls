@@ -2,113 +2,61 @@ import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuthUser } from "../authUser/authUserSlice";
 import { saveQuestionAnswerAsync } from "../questions/questionsSlice";
 import { Avatar } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { useNavigate } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 const NotAnsweredQuestion = ({ questionId }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [answered, setAnswered] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
   var questions = useSelector((state) => state.questions.data);
   const question = questions[questionId];
   const authedUser = useSelector(selectAuthUser);
   var users = useSelector((state) => state.users.data);
   var author = users[question.author];
 
-  function prepareReplies() {
-    var data = [];
-    question["optionOne"].votes.forEach((userId) => {
-      let user = users[userId];
-      data.push({ one: user, two: null });
-    });
-    question["optionTwo"].votes.forEach((userId) => {
-      let user = users[userId];
-      data.push({ one: null, two: user });
-    });
-  }
-
   const selectOptionOne = (e) => {
     e.preventDefault();
     dispatch(
       saveQuestionAnswerAsync({
-        authedUser,
+        authedUser: authedUser.id,
         qid: questionId,
         answer: "optionOne",
       })
     );
-    setTimeout(() => setAnswered(true), 250);
+    setAnswered(true);
+    setSelectedOption("optionOne");
   };
 
   const selectOptionTwo = (e) => {
     e.preventDefault();
-    dispatch(
-      saveQuestionAnswerAsync({
-        authedUser,
-        qid: questionId,
-        answer: "optionTwo",
-      })
-    );
-    setTimeout(() => setAnswered(true), 250);
+
+    setAnswered(true);
+    setSelectedOption("optionTwo");
   };
 
-  function ItemOne({ row }) {
-    if (row.one !== null)
-      return (
-        <Stack direction={"row"}>
-          <Avatar src={row.one.avatarURL} /> {row.one.name} ({row.one.id})
-        </Stack>
+  useEffect(() => {
+    if (answered) {
+      dispatch(
+        saveQuestionAnswerAsync({
+          authedUser: authedUser.id,
+          qid: questionId,
+          answer: selectedOption,
+        })
       );
-  }
-
-  function ItemTwo({ row }) {
-    if (row.two !== null)
-      return (
-        <Stack direction={"row"}>
-          <Avatar src={row.two.avatarURL} /> {row.two.name} ({row.two.id})
-        </Stack>
-      );
-  }
-
-  function Replies() {
-    if (!answered) return <div />;
-
-    var data = prepareReplies();
-    return (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="leaderboard table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Users selected first option</TableCell>
-              <TableCell>Users selected second option</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => (
-              <TableRow key={(row.one || row.two).id}>
-                <TableCell component="th" scope="row">
-                  <ItemOne row={row} />
-                </TableCell>
-                <TableCell>
-                  <ItemTwo row={row} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
-  }
+      setTimeout(() => {
+        navigate(`/questions/${questionId}`);
+      }, 1200);
+    }
+  }, [answered, selectedOption, authedUser.id, questionId, dispatch, navigate]);
 
   return (
     <Grid container spacing={2}>
@@ -168,7 +116,6 @@ const NotAnsweredQuestion = ({ questionId }) => {
           </Button>
         </Stack>
       </Grid>
-      <Grid xs={12}>{answered && <Replies />}</Grid>
     </Grid>
   );
 };
