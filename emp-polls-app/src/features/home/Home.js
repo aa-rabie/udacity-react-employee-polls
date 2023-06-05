@@ -19,6 +19,19 @@ const Home = (props) => {
   var questions = useSelector((state) => state.questions.data);
   const questionsIds = Object.keys(questions);
 
+  function sortDescending(a, b) {
+    let timestampA = a.timestamp;
+    let timestampB = b.timestamp;
+    if (timestampA < timestampB) {
+      return 1;
+    }
+    if (timestampA > timestampB) {
+      return -1;
+    }
+    // a must be equal to b
+    return 0;
+  }
+
   function filterQuestions() {
     let done = [],
       newQuestions = [];
@@ -33,7 +46,10 @@ const Home = (props) => {
         newQuestions.push(q);
       }
     });
-    return { done, newQuestions };
+    return {
+      done: done.sort(sortDescending),
+      newQuestions: newQuestions.sort(sortDescending),
+    };
   }
 
   var qGroups = filterQuestions();
