@@ -2,15 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestionsAsync } from "../questions/questionsSlice";
 import { selectAuthUser } from "../authUser/authUserSlice";
 import QuestionList from "../questions/QuestionList";
+import { useEffect, useState } from "react";
 
 const Home = (props) => {
   const dispatch = useDispatch();
   var currentlyLoggedInUser = useSelector(selectAuthUser);
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
-  var status = useSelector((state) => state.questions.status);
-  if (status !== "loaded") {
-    dispatch(fetchAllQuestionsAsync());
-  }
+  useEffect(() => {
+    if (!questionsLoaded) {
+      dispatch(fetchAllQuestionsAsync());
+      setQuestionsLoaded(true);
+    }
+  }, [questionsLoaded, dispatch]);
 
   var questions = useSelector((state) => state.questions.data);
   const questionsIds = Object.keys(questions);

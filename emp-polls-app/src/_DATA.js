@@ -198,16 +198,27 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
     }
 
     setTimeout(() => {
-      users = {
-        ...users,
-        [authedUser]: {
-          ...users[authedUser],
-          answers: {
-            ...users[authedUser].answers,
-            [qid]: answer,
+      var answerExistsForUser =
+        users[authedUser].answers &&
+        users[authedUser].answers.hasOwnProperty(qid) &&
+        users[authedUser].answers[qid] === answer;
+      if (!answerExistsForUser) {
+        users = {
+          ...users,
+          [authedUser]: {
+            ...users[authedUser],
+            answers: {
+              ...users[authedUser].answers,
+              [qid]: answer,
+            },
           },
-        },
+        };
       };
+    
+
+      var userExistsinAnswerVotes =
+        questions[qid][answer].votes &&
+        questions[qid][answer].votes.indexOf(authedUser) > -1;
 
       questions = {
         ...questions,
@@ -215,11 +226,13 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
           ...questions[qid],
           [answer]: {
             ...questions[qid][answer],
-            votes: questions[qid][answer].votes.concat([authedUser]),
+            votes: userExistsinAnswerVotes
+              ? questions[qid][answer].votes
+              : questions[qid][answer].votes.concat([authedUser]),
           },
         },
       };
-
+      console.log(questions[qid]);
       resolve(true);
     }, 500);
   });

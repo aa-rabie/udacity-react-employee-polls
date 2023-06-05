@@ -13,8 +13,7 @@ import { Avatar, Stack } from "@mui/material";
 const Leaderboard = (props) => {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
-  var status = useSelector((state) => state.users.status);
-
+  
   var users = useSelector((state) => state.users.data);
   const usersIds = Object.keys(users);
 

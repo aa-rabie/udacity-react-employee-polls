@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -18,6 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function Login() {
   const dispatch = useDispatch();
   const [selectedUser, setSeletedUser] = useState("");
+  const [loaded, setLoaded] = useState(false);
   const [alertDisplayed, setAlertDisplayed] = useState(false);
   let location = useLocation();
   let navigate = useNavigate();
@@ -32,10 +33,13 @@ export default function Login() {
     );
   };
 
-  var status = useSelector((state) => state.users.status);
-  if (status !== "loaded") {
-    dispatch(fetchAllUsersAsync());
-  }
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(fetchAllUsersAsync());
+
+      setLoaded(true);
+    }
+  }, [loaded, dispatch]);
 
   var users = useSelector((state) => state.users.data);
   const usersIds = Object.keys(users);
