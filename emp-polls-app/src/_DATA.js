@@ -42,7 +42,8 @@ let users = {
     id: "zoshikanlu",
     password: "pass246",
     name: "Zenobia Oshikanlu",
-    avatarURL: 'https://gravatar.com/avatar/485e4a6fde280cb3018ebd952b553cf2?s=50&d=robohash&r=x',
+    avatarURL:
+      "https://gravatar.com/avatar/485e4a6fde280cb3018ebd952b553cf2?s=50&d=robohash&r=x",
     answers: {
       xj352vofupe1dqz9emx13r: "optionOne",
     },
@@ -182,6 +183,8 @@ export function _saveQuestion(question) {
         ...questions,
         [formattedQuestion.id]: formattedQuestion,
       };
+
+      //TODO : DECIDE IF WE SHOULD UPDATE AUTHOR'S QUESTIONS ARRAY
 
       resolve(formattedQuestion);
     }, 1000);

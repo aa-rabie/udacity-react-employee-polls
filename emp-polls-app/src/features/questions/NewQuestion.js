@@ -7,8 +7,18 @@ import {
   Container,
   Box,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { saveQuestionAsync } from "../questions/questionsSlice";
+import { selectAuthUser } from "../authUser/authUserSlice";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-const NewQuestion = ({ authedUser, submitFn }) => {
+const NewQuestion = () => {
+  const [dataSubmitted, setDataSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  var authedUser = useSelector(selectAuthUser);
+
   const { handleSubmit, register, formState } = useForm({
     defaultValues: {
       optionOne: "",
@@ -18,9 +28,21 @@ const NewQuestion = ({ authedUser, submitFn }) => {
 
   let errors = formState.errors;
 
-  //TODO: remove onSubmit & use submitFn
   const onSubmit = (data) => {
-    console.log(data);
+    let questionData = {
+      author: authedUser.id,
+      optionOneText: data.optionOne,
+      optionTwoText: data.optionTwo,
+    };
+    //TODO: REMOVE LOG STATEMENT
+    console.log(questionData);
+
+    setDataSubmitted(true);
+
+    dispatch(saveQuestionAsync(questionData));
+    setTimeout(() => {
+      navigate("/home");
+    }, 1200);
   };
 
   return (
@@ -66,7 +88,7 @@ const NewQuestion = ({ authedUser, submitFn }) => {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={!formState.isValid}
+              disabled={!formState.isValid || dataSubmitted}
             >
               Submit
             </Button>
