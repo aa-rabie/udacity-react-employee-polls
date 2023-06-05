@@ -6,8 +6,6 @@ import authUserReducer from "../features/authUser/authUserSlice";
 
 export const store = configureStore({
   reducer: {
-    //TODO: CLEANUP
-    // counter: counterReducer,
     users: usersReducer,
     authUser: authUserReducer,
     questions: questionsReducer,

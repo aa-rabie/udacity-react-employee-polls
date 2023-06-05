@@ -34,8 +34,7 @@ const NewQuestion = () => {
       optionOneText: data.optionOne,
       optionTwoText: data.optionTwo,
     };
-    //TODO: REMOVE LOG STATEMENT
-    console.log(questionData);
+    
 
     setDataSubmitted(true);
 

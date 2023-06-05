@@ -32,8 +32,7 @@ const QuestionDetails = () => {
 
   const q = questionNotFound ? null : questions[qid];
 
-  //TODO: REMOVE
-  console.log(questionNotFound ? `question not found for id : ${qid} ` : q);
+ 
 
   var isAnswered =
     isAllowed === false || questionNotFound
@@ -41,10 +40,6 @@ const QuestionDetails = () => {
       : q["optionOne"].votes.indexOf(authedUser.id) > -1 ||
         q["optionTwo"].votes.indexOf(authedUser.id) > -1;
 
-  //TODO: REMOVE
-  console.log(
-    `isAllowed : ${isAllowed}, qid: ${qid} , questionNotFound : ${questionNotFound} , isAnswered : ${isAnswered}`
-  );
 
   function Login() {
     return (

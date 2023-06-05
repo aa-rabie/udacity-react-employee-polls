@@ -49,13 +49,6 @@ export default function Login() {
     setAlertDisplayed(selectedUser === "");
     if (selectedUser === "") return;
 
-    //TODO: REMOVE LOG
-    console.log({
-      authUser: users[selectedUser],
-      location: location,
-      doesAnyHistoryEntryExist,
-    });
-
     dispatch(setAuthUser(users[selectedUser]));
 
     setTimeout(() => {

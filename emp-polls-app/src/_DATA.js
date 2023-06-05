@@ -231,8 +231,7 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
           },
         },
       };
-      //TODO: REMOVE LOG
-      console.log(questions[qid]);
+      
       resolve(true);
     }, 500);
   });
