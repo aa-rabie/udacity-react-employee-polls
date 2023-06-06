@@ -52,7 +52,8 @@ const NotAnsweredQuestion = ({ questionId }) => {
           answer: selectedOption,
         })
       );
-      setTimeout(() => {
+      const timer = setTimeout(() => {
+        clearInterval(timer);
         navigate(`/questions/${questionId}`);
       }, 1200);
     }

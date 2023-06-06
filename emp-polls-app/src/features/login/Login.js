@@ -51,7 +51,8 @@ export default function Login() {
 
     dispatch(setAuthUser(users[selectedUser]));
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      clearInterval(timer);
       if (doesAnyHistoryEntryExist) {
         // go back to previous page
         navigate(-1);

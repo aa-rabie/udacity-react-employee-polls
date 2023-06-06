@@ -34,12 +34,12 @@ const NewQuestion = () => {
       optionOneText: data.optionOne,
       optionTwoText: data.optionTwo,
     };
-    
 
     setDataSubmitted(true);
 
     dispatch(saveQuestionAsync(questionData));
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      clearInterval(timer);
       navigate("/home");
     }, 1200);
   };
