@@ -82,6 +82,7 @@ export default function Login() {
           <FormControl fullWidth>
             <InputLabel id="users-select-label">Login As</InputLabel>
             <Select
+              inputProps={{ "data-testid": "users-select" }}
               labelId="users-select-label"
               id="users-select"
               name="users-select"
@@ -101,6 +102,7 @@ export default function Login() {
             </Select>
           </FormControl>
           <Button
+            data-testid="signIn"
             type="submit"
             fullWidth
             variant="contained"
