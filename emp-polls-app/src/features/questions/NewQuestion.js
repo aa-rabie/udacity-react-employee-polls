@@ -42,7 +42,7 @@ const NewQuestion = () => {
     const timer = setTimeout(() => {
       clearInterval(timer);
       navigate("/home", { state: { previousPath: location.pathname } });
-    }, 1200);
+    }, 1100);
   };
 
   return (

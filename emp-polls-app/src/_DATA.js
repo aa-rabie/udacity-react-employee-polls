@@ -1,3 +1,5 @@
+import { produce } from "immer";
+
 let users = {
   sarahedo: {
     id: "sarahedo",
@@ -184,7 +186,14 @@ export function _saveQuestion(question) {
         [formattedQuestion.id]: formattedQuestion,
       };
 
-      //TODO : DECIDE IF WE SHOULD UPDATE AUTHOR'S QUESTIONS ARRAY
+      //UPDATE AUTHOR'S QUESTIONS ARRAY
+      users = produce(users, (draft) => {
+        if (draft.hasOwnProperty(question.author)) {
+          draft[question.author].questions.push(formattedQuestion.id);
+        }
+      });
+
+      console.log(users);
 
       resolve(formattedQuestion);
     }, 1000);
@@ -231,7 +240,7 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
           },
         },
       };
-      
+
       resolve(true);
     }, 500);
   });
