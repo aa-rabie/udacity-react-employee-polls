@@ -3,11 +3,14 @@ import { fetchAllQuestionsAsync } from "../questions/questionsSlice";
 import { selectAuthUser } from "../authUser/authUserSlice";
 import QuestionList from "../questions/QuestionList";
 import { useEffect, useState } from "react";
+import { Button, Stack } from "@mui/material";
+import Box from "@mui/material/Box";
 
 const Home = (props) => {
   const dispatch = useDispatch();
   var currentlyLoggedInUser = useSelector(selectAuthUser);
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
+  const [displayNewQuestions, setDisplayNewQuestions] = useState(true);
 
   useEffect(() => {
     if (!questionsLoaded) {
@@ -54,14 +57,52 @@ const Home = (props) => {
 
   var qGroups = filterQuestions();
 
+  const DoneQ = () => {
+    return (
+      !displayNewQuestions && (
+        <QuestionList
+          title="Answered Polls"
+          questions={qGroups.done}
+        ></QuestionList>
+      )
+    );
+  };
+
+  const NewQ = () => {
+    return (
+      displayNewQuestions && (
+        <QuestionList
+          title="Unanswered Polls"
+          questions={qGroups.newQuestions}
+        ></QuestionList>
+      )
+    );
+  };
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    setDisplayNewQuestions(!displayNewQuestions);
+  };
+
   return (
-    <>
-      <QuestionList
-        title="New Questions"
-        questions={qGroups.newQuestions}
-      ></QuestionList>
-      <QuestionList title="Done" questions={qGroups.done}></QuestionList>
-    </>
+    <Stack spacing={2}>
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Button variant="contained" onClick={handleChange}>
+          {displayNewQuestions
+            ? "Display Answered Polls"
+            : "Display Unanswered Polls"}
+        </Button>
+      </Box>
+      <NewQ />
+      <DoneQ />
+    </Stack>
   );
 };
 
