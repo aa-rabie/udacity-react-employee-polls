@@ -193,8 +193,6 @@ export function _saveQuestion(question) {
         }
       });
 
-      console.log(users);
-
       resolve(formattedQuestion);
     }, 1000);
   });
