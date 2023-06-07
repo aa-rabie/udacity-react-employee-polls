@@ -16,7 +16,7 @@ export default function NotFound() {
       }}
     >
       <Typography variant="h1" style={{ color: "white" }}>
-        404
+      404 Not Found
       </Typography>
     </Box>
   );

@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectAuthUser } from "../authUser/authUserSlice";
 import { saveQuestionAnswerAsync } from "../questions/questionsSlice";
 import { Avatar } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 const NotAnsweredQuestion = ({ questionId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [answered, setAnswered] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   var questions = useSelector((state) => state.questions.data);
@@ -54,10 +55,12 @@ const NotAnsweredQuestion = ({ questionId }) => {
       );
       const timer = setTimeout(() => {
         clearInterval(timer);
-        navigate(`/questions/${questionId}`);
+        navigate(`/questions/${questionId}`, {
+          state: { previousPath: location.pathname },
+        });
       }, 1200);
     }
-  }, [answered, selectedOption, authedUser.id, questionId, dispatch, navigate]);
+  }, [answered, selectedOption, authedUser.id, questionId, dispatch, navigate, location.pathname]);
 
   return (
     <Grid container spacing={2}>

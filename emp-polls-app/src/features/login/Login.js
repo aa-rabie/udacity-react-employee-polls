@@ -15,7 +15,7 @@ import { fetchAllUsersAsync } from "../users/usersSlice";
 import { setAuthUser, selectAuthUser } from "../authUser/authUserSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({ redirectTo }) {
   const dispatch = useDispatch();
   const [selectedUser, setSeletedUser] = useState("");
   const [loaded, setLoaded] = useState(false);
@@ -53,11 +53,20 @@ export default function Login() {
 
     const timer = setTimeout(() => {
       clearInterval(timer);
-      if (doesAnyHistoryEntryExist) {
+      if (redirectTo && redirectTo.length > 0) {
+        navigate(redirectTo, { state: { previousPath: location.pathname } });
+        return;
+      } else if (doesAnyHistoryEntryExist) {
+        let shouldGoToHome =
+          location.state &&
+          location.state.previousPath &&
+          location.state.previousPath === "/404";
         // go back to previous page
-        navigate(-1);
+        shouldGoToHome
+          ? navigate("/home", { state: { previousPath: location.pathname } })
+          : navigate(-1);
       } else {
-        navigate("/home");
+        navigate("/home", { state: { previousPath: location.pathname } });
       }
     }, 100);
   };
@@ -76,7 +85,11 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {currentlyLoggedInUser === null ? "Sign in" : "Switch User"}
+          {currentlyLoggedInUser === null
+            ? redirectTo && redirectTo.length > 0
+              ? "Please Sign in first"
+              : "Sign in"
+            : "Switch User"}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <FormControl fullWidth>

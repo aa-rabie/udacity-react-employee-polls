@@ -22,7 +22,13 @@ import LoginIcon from "@mui/icons-material/Login";
 import PollIcon from "@mui/icons-material/Poll";
 import HomeIcon from "@mui/icons-material/Home";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import { Outlet, Link, useNavigate, useNavigation } from "react-router-dom";
+import {
+  Outlet,
+  Link,
+  useNavigate,
+  useNavigation,
+  useLocation,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectAuthUser,
@@ -82,6 +88,7 @@ export default function Root() {
   const [open, setOpen] = React.useState(false);
   let navigate = useNavigate();
   let navigation = useNavigation();
+  const location = useLocation();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,7 +104,7 @@ export default function Root() {
     e.preventDefault();
     dispatch(setAuthUser(null));
     //navigate to login page
-    navigate("/");
+    navigate("/", { state: { previousPath: location.pathname } });
   };
 
   if (navigation.state === "loading") {
@@ -166,7 +173,11 @@ export default function Root() {
         <Divider />
         <List>
           <ListItem key={"Login"} disablePadding>
-            <ListItemButton component={Link} to={""}>
+            <ListItemButton
+              component={Link}
+              to={""}
+              state={{ previousPath: location.pathname }}
+            >
               <ListItemIcon>
                 <LoginIcon />
               </ListItemIcon>
@@ -179,6 +190,7 @@ export default function Root() {
             <ListItemButton
               component={Link}
               to={"/home"}
+              state={{ previousPath: location.pathname }}
               disabled={authedUser === null}
             >
               <ListItemIcon>
@@ -191,6 +203,7 @@ export default function Root() {
             <ListItemButton
               component={Link}
               to={"/add"}
+              state={{ previousPath: location.pathname }}
               disabled={authedUser === null}
             >
               <ListItemIcon>
@@ -203,6 +216,7 @@ export default function Root() {
             <ListItemButton
               component={Link}
               to={"/leaderboard"}
+              state={{ previousPath: location.pathname }}
               disabled={authedUser === null}
             >
               <ListItemIcon>

@@ -1,14 +1,17 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const QuestionSummary = ({ question }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = (e) => {
     e.preventDefault();
-    navigate(`/questions/${question.id}`);
+    navigate(`/questions/${question.id}`, {
+      state: { previousPath: location.pathname },
+    });
   };
 
   function formatDate() {

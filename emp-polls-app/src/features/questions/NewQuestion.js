@@ -10,12 +10,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { saveQuestionAsync } from "../questions/questionsSlice";
 import { selectAuthUser } from "../authUser/authUserSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 const NewQuestion = () => {
   const [dataSubmitted, setDataSubmitted] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   var authedUser = useSelector(selectAuthUser);
 
@@ -40,7 +41,7 @@ const NewQuestion = () => {
     dispatch(saveQuestionAsync(questionData));
     const timer = setTimeout(() => {
       clearInterval(timer);
-      navigate("/home");
+      navigate("/home", { state: { previousPath: location.pathname } });
     }, 1200);
   };
 
